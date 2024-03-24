@@ -1,4 +1,4 @@
-# Multiple-PDFs-Chatbot
+# Multiple-PDFs-Chatbot App
 
 ## Introduction
 ------------
