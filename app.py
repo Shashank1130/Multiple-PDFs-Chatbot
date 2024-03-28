@@ -115,16 +115,5 @@ def main():
                 st.session_state.conversation = get_conversation_chain(
                     vectorstore)
                 
-    
-   
-                
-
-                
-                # get the text chunks
-
-                # create vector store
-
-
-
 if __name__=='__main__':
     main()
