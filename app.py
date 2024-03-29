@@ -17,8 +17,7 @@ from langchain.base_language import BaseLanguageModel
 from htmlTemplates import css, bot_template, user_template
 
 
- 
- 
+# Function to read the text from PDF files
 def get_pdf_text(pdf_docs):
     text = ""
     for pdf in pdf_docs:
@@ -28,19 +27,19 @@ def get_pdf_text(pdf_docs):
     return text
 
 
-
+# Fucntion to break the text into smaller chunks
 def get_text_chunks(text):
     text_splitter = CharacterTextSplitter(
         separator="\n",
-        chunk_size=3000,
-        chunk_overlap=600,
+        chunk_size=1000,
+        chunk_overlap=200,
         length_function=len
     )
     chunks = text_splitter.split_text(text)
     return chunks
 
 
-
+# Function to create the vector store
 def get_vectorstore(text_chunks):
     embeddings = OpenAIEmbeddings()
     # embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-xl")
@@ -48,8 +47,7 @@ def get_vectorstore(text_chunks):
     return vectorstore
 
 
-
-
+# Function to create conversational chain and adding memory to it
 def get_conversation_chain(vectorstore):
     llm = ChatOpenAI()
 
@@ -63,8 +61,7 @@ def get_conversation_chain(vectorstore):
     return conversation_chain
 
 
-
-
+# Function for showing the output in chatbot interface
 def handle_userinput(user_question):
     response = st.session_state.conversation({'question': user_question})
     st.session_state.chat_history = response['chat_history']
@@ -90,15 +87,19 @@ def main():
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = None
 
+    # User Input
     st.header("Chat with multiple PDFs :books:")
     user_question = st.text_input("Ask a question about your documents:")
     if user_question:
         handle_userinput(user_question)
 
+    # Side bar
     with st.sidebar:
         st.subheader("Your documents")
+        # Upload pdfs
         pdf_docs = st.file_uploader(
             "Upload your PDFs here and click on 'Process'", accept_multiple_files=True)
+     
         if st.button("Process"):
             with st.spinner("Processing"):
                 # get pdf text
